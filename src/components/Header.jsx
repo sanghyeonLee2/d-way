@@ -13,6 +13,7 @@ const HeaderLayout = styled.header`
     font-weight: 400;
     src: url(https://fonts.gstatic.com/s/materialsymbolsrounded/v123/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvDmUSVOK7BDB_Qb9vUSzq3wzLK-P0J-V_Zs-QtQth3-jOc7TOVpeRL2w5rwZu2rIelXxc.woff2)
       format("woff2");
+    
   }
 
   span {
@@ -47,6 +48,7 @@ const HeaderLayout = styled.header`
 `;
 function Header() {
   const location = useLocation();
+
   return (
     <HeaderLayout className={location.pathname}>
       <span className="logo">D'way</span>

@@ -16,6 +16,8 @@ const SignUpSection = styled.div`
 `;
 function SignUp() {
   const navigate = useNavigate();
+
+  const API_KEY = process.env.REACT_APP_API_KEY;
   const [formState, setFormState] = useState({
     username: "",
     password: "",
@@ -44,7 +46,7 @@ function SignUp() {
     }
     try {
       const result = await axios.post(
-        "http://ec2-3-39-105-45.ap-northeast-2.compute.amazonaws.com:8080/api/auth/registration",
+        `${API_KEY}/api/auth/registration`,
         formState
       );
       if (result.status === 200) {

@@ -79,6 +79,7 @@ function SignIn() {
     password: "",
   });
 
+  const API_KEY = process.env.REACT_APP_API_KEY;
   const signInHandler = (e) => {
     setSignInState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -88,7 +89,7 @@ function SignIn() {
     e.preventDefault();
     try {
       const result = await axios.post(
-        "http://ec2-3-39-105-45.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login",
+        `${API_KEY}/api/auth/login`,
         signInState
       );
       if (result.status === 200) {
