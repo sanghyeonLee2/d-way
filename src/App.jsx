@@ -28,7 +28,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  width: 90%;
+  width: 100%;
   height: 740px;
 `;
 function App() {

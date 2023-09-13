@@ -3,24 +3,34 @@ import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 
 const HeaderLayout = styled.header`
+  width: 100%;
   display: flex;
   padding: 10px;
   z-index: 20;
-
   @font-face {
     font-family: "Material Symbols Rounded";
     font-style: normal;
     font-weight: 400;
     src: url(https://fonts.gstatic.com/s/materialsymbolsrounded/v123/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvDmUSVOK7BDB_Qb9vUSzq3wzLK-P0J-V_Zs-QtQth3-jOc7TOVpeRL2w5rwZu2rIelXxc.woff2)
       format("woff2");
+  }
+
+  @font-face {
+    font-family: 'PartialSansKR-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/PartialSansKR-Regular.woff2') format('woff2');
+    font-weight: normal;
     
+    font-style: normal;
   }
 
   span {
     color: ${(props) => (props.className !== "/" ? "black" : "white")};
   }
   .logo {
-    margin-top: 15px;
+    text-decoration: none;
+    font-family: 'PartialSansKR-Regular';
+    margin-top: 6px;
+    font-size: 35px;
   }
 
   #material-symbols-rounded {
@@ -43,15 +53,18 @@ const HeaderLayout = styled.header`
     justify-content: space-between;
   }
   .header-reserv-menu {
+    margin-left: 69px;
+    margin-right:69px;
     width: 820px;
   }
 `;
 function Header() {
   const location = useLocation();
-
   return (
     <HeaderLayout className={location.pathname}>
+      <Link to={"/"}>
       <span className="logo">D'way</span>
+      </Link>
       <div className="header-reserv-menu">
         <ul>
           <li>
