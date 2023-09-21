@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useEffect, useReducer, useState} from "react";
+import React, {useEffect, useReducer, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 
@@ -18,22 +18,21 @@ const SignUpSection = styled.fieldset`
 function SignUp() {
     const navigate = useNavigate();
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const [duplicatedState, setDuplicatedState] = useState(false)
     const [regionCountry, setRegionCountry] = useState();
+    const usernameRef = useRef();
+
+    //const pattern = /\s/g; //공백 확인 정규표현식
 
     const reducer = (state, action) => {
         switch (action.type) {
             case "username":
+            case "korFirstName":
+            case "korLastName":
                 return {
                     ...state, [action.type]: action.value
                 }
             case "password":
             case "passwordConfirm":
-                return {
-                    ...state, [action.type]: action.value
-                }
-            case "korFirstName":
-            case "korLastName":
                 return {
                     ...state, [action.type]: action.value
                 }
@@ -77,7 +76,6 @@ function SignUp() {
         phone: "",
         country: "",
     });
-
     console.log(state);
 
     useEffect(() => {
@@ -98,11 +96,11 @@ function SignUp() {
             if ((result.status === 200 ) && result.data.duplicated) {
                 console.log(result.data)
                 alert("아이디가 중복됩니다.")
-                setDuplicatedState(true);
             }
             else{
+                console.dir(usernameRef.current)
+                usernameRef.current.disabled = true;
                 alert("사용가능한 아이디 입니다.")
-                setDuplicatedState(false);
             }
         } catch (err) {
             alert("에러가 발생 했습니다.")
@@ -121,7 +119,7 @@ function SignUp() {
                 `${API_KEY}/api/auth/registration`,
                 state
             );
-            if (result.status === 200 && duplicatedState) {
+            if (result.status === 200) {
                 alert("회원가입이 완료되었습니다.");
                 navigate("/");
             }
@@ -138,9 +136,9 @@ function SignUp() {
                     <div>
                         아이디 <input type="text" onChange={(e) => {
                         dispatch({type: "username", value: e.target.value})
-                    }} required/>
+                    }} required ref={usernameRef}/>
                         <button type="button" onClick={duplicateConfirm}>중복확인</button>
-                        {!duplicatedState && <span><small>중복확인 완료</small></span>}
+
                     </div>
                     비밀번호
                     <input type="password" onChange={(e) => {
