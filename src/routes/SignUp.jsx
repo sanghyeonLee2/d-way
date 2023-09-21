@@ -18,8 +18,9 @@ const SignUpSection = styled.fieldset`
 function SignUp() {
     const navigate = useNavigate();
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const [duplicated, setDuplicated] = useState(false)
+    const [duplicatedState, setDuplicatedState] = useState(false)
     const [regionCountry, setRegionCountry] = useState();
+
     const reducer = (state, action) => {
         switch (action.type) {
             case "username":
@@ -57,7 +58,8 @@ function SignUp() {
                 return {
                     ...state, [action.type]: countryCode
                 }
-            default: return;
+            default:
+                return;
         }
     }
     const [state, dispatch] = useReducer(reducer, {
@@ -76,6 +78,8 @@ function SignUp() {
         country: "",
     });
 
+    console.log(state);
+
     useEffect(() => {
         const fetchRegion = async () => {
             const result = await axios.get(
@@ -91,13 +95,14 @@ function SignUp() {
         const {username} = state;
         try {
             const result = await axios.get(`${API_KEY}/api/auth/check-duplication`, {params: {username}});
-            if ((result.status === 200) && (result.data.username === username)) {
-                alert("아이디가 중복됩니다");
-                return duplicated && setDuplicated(false);
+            if ((result.status === 200 ) && result.data.duplicated) {
+                console.log(result.data)
+                alert("아이디가 중복됩니다.")
+                setDuplicatedState(true);
             }
-            if ((result.status === 200) && (result.data.username !== username)) {
-                alert("사용가능한 아이디 입니다");
-                return setDuplicated(true);
+            else{
+                alert("사용가능한 아이디 입니다.")
+                setDuplicatedState(false);
             }
         } catch (err) {
             alert("에러가 발생 했습니다.")
@@ -116,11 +121,12 @@ function SignUp() {
                 `${API_KEY}/api/auth/registration`,
                 state
             );
-            if (result.status === 200 && duplicated === true) {
+            if (result.status === 200 && duplicatedState) {
                 alert("회원가입이 완료되었습니다.");
                 navigate("/");
             }
         } catch (err) {
+            alert("회원가입에 실패하였습니다.");
             console.log(err);
         }
     };
@@ -130,61 +136,60 @@ function SignUp() {
                 <legend><h1>회원가입</h1></legend>
                 <form className="signup-form" onSubmit={signUpSubmit}>
                     <div>
-                        아이디 <input type="text" name="username" onChange={(e) => {
-                        dispatch({type: e.target.name, value: e.target.value})
+                        아이디 <input type="text" onChange={(e) => {
+                        dispatch({type: "username", value: e.target.value})
                     }} required/>
                         <button type="button" onClick={duplicateConfirm}>중복확인</button>
-                        {duplicated && <span><small>중복확인 완료</small></span>}
+                        {!duplicatedState && <span><small>중복확인 완료</small></span>}
                     </div>
                     비밀번호
-                    <input type="password" name="password" onChange={(e) => {
-                        dispatch({type: e.target.name, value: e.target.value}) // 이 부분이 action
+                    <input type="password" onChange={(e) => {
+                        dispatch({type: "password", value: e.target.value}) // 이 부분이 action
                     }} required autoComplete="on"/>
                     비밀번호 확인
                     <input
                         type="password"
-                        name="passwordConfirm"
                         onChange={(e) => {
-                            dispatch({type: e.target.name, value: e.target.value})
+                            dispatch({type: "passwordConfirm", value: e.target.value})
                         }}
                         autoComplete="on"
                     />
                     성
-                    <input type="text" name="korFirstName" onChange={(e) => {
-                        dispatch({type: e.target.name, value: e.target.value})
+                    <input type="text" onChange={(e) => {
+                        dispatch({type: "korFirstName", value: e.target.value})
                     }} required/>
                     이름
-                    <input type="text" name="korLastName" onChange={(e) => {
-                        dispatch({type: e.target.name, value: e.target.value})
+                    <input type="text" onChange={(e) => {
+                        dispatch({type: "korLastName", value: e.target.value})
                     }} required/>
                     영문 이름
-                    <input type="text" name="engFirstName" onChange={(e) => {
-                        dispatch({type: e.target.name, value: e.target.value})
+                    <input type="text" onChange={(e) => {
+                        dispatch({type: "engFirstName", value: e.target.value})
                     }} required/>
                     영문 성
-                    <input type="text" name="engLastName" onChange={(e) => {
-                        dispatch({type: e.target.name, value: e.target.value})
+                    <input type="text" onChange={(e) => {
+                        dispatch({type: "engLastName", value: e.target.value})
                     }} required/>
                     성별을 선택하세요
                     <div>
-                        MALE<input type="radio" name="gender" onChange={(e) => {
-                        dispatch({type: e.target.name, value: e.target.previousSibling.data})
+                        MALE<input type="radio" onChange={(e) => {
+                        dispatch({type: "gender", value: e.target.previousSibling.data})
                     }}/>
-                        FEMALE<input type="radio" name="gender" onChange={(e) => {
-                        dispatch({type: e.target.name, value: e.target.previousSibling.data})
+                        FEMALE<input type="radio" onChange={(e) => {
+                        dispatch({type: "gender", value: e.target.previousSibling.data})
                     }}/>
                     </div>
-                    생년월일 <input type="date" name="birthDay" onChange={(e) => {
-                    dispatch({type: e.target.name, value: e.target.value})
+                    생년월일 <input type="date" onChange={(e) => {
+                    dispatch({type: "birthDay", value: e.target.value})
                 }} required/>
-                    이메일 <input type="email" name="email" onChange={(e) => {
-                    dispatch({type: e.target.name, value: e.target.value})
+                    이메일 <input type="email" onChange={(e) => {
+                    dispatch({type: "email", value: e.target.value})
                 }} required/>
                     <div>
                         휴대전화 국가
                         <br/>
-                        <select name="phoneCountry" onChange={(e) => {
-                            dispatch({type: e.target.name, value: e.target.value})
+                        <select onChange={(e) => {
+                            dispatch({type: "phoneCountry", value: e.target.value})
                         }}>
                             <option>====선택====</option>
                             {regionCountry && regionCountry.map((code) => {
@@ -193,14 +198,14 @@ function SignUp() {
                         </select>
                     </div>
                     휴대전화 번호
-                    <input type="tel" name="phone" onChange={(e) => {
-                        dispatch({type: e.target.name, value: e.target.value})
+                    <input type="tel" onChange={(e) => {
+                        dispatch({type: "phone", value: e.target.value})
                     }} required/>
                     <div>
                         국가
                         <br/>
-                        <select name="country" onChange={(e) => {
-                            dispatch({type: e.target.name, value: e.target.value})
+                        <select onChange={(e) => {
+                            dispatch({type: "country", value: e.target.value})
                         }}>
                             <option>====선택====</option>
                             {regionCountry && regionCountry.map((code) => {
