@@ -3,6 +3,8 @@ import { styled } from "styled-components";
 import OAuthSignIn from "../components/OAuthSignIn";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import {useSetRecoilState} from "recoil";
+import {SignInAtom} from "../recoil/SignInAtom";
 
 const SignInContainer = styled.div`
   text-align: center;
@@ -78,21 +80,24 @@ function SignIn() {
     username: "",
     password: "",
   });
+  const setUserInfo = useSetRecoilState(SignInAtom);
 
   const API_KEY = process.env.REACT_APP_API_KEY;
   const signInHandler = (e) => {
     setSignInState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  console.log(signInState);
-
+console.log(setUserInfo);
   const signInSubmit = async (e) => {
     e.preventDefault();
     try {
       const result = await axios.post(
         `${API_KEY}/api/auth/login`,
-        signInState
+          signInState
       );
       if (result.status === 200) {
+        localStorage.setItem("access-token",result.data.accessToken);
+        localStorage.setItem("refresh-token",result.data.refreshToken);
+        setUserInfo(signInState.username);
         console.log(result.data);
         alert("로그인 성공");
         navigate("/");
@@ -147,6 +152,7 @@ function SignIn() {
                       placeholder="비밀번호를 입력하세요"
                       className="input-pw"
                       onChange={signInHandler}
+                      autoComplete="on"
                     />
                   </div>
                   {/* <span>
