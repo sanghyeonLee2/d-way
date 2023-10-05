@@ -4,6 +4,8 @@ import ReactDOM from "react-dom/client";
 import SignIn from "./routes/SignIn";
 import Home from "./routes/Home";
 import SignUp from "./routes/SignUp";
+import {RecoilRoot} from "recoil";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -25,4 +27,4 @@ const router = createBrowserRouter([
   },
 ]);
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<RouterProvider router={router} />);
+root.render(<RecoilRoot><RouterProvider router={router} /></RecoilRoot>);
