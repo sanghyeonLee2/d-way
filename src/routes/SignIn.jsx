@@ -5,75 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {useSetRecoilState} from "recoil";
 import {SignInAtom} from "../recoil/SignInAtom";
-
-const SignInContainer = styled.div`
-  text-align: center;
-  width: 100%;
-`;
-
-const SignInList = styled.ul`
-  display: flex;
-  li {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 25%;
-    min-height: 60px;
-    font-weight: 700;
-    color: rgb(210, 44, 38);
-    background-color: rgb(255, 255, 255);
-    border-top: 4px solid rgb(210, 44, 38);
-    border-left: 1px solid rgb(204, 204, 204);
-    border-bottom: 0px;
-  }
-`;
-const LogInTitle = styled.div`
-  margin-bottom: 70px;
-`;
-
-const LogInTypeTab = styled.div`
-  width: 980px;
-  margin: 0px auto;
-  padding-top: 70px;
-`;
-const LogInType = styled.div`
-  display: flex;
-  margin: 0px auto;
-  justify-content: center;
-`;
-
-const LogInSection = styled.div`
-  width: 500px;
-  .email-section {
-  }
-  .pw-section {
-  }
-  .input-email {
-    width: 100%;
-  }
-  .input-pw {
-    margin-top: 5px;
-    width: 100%;
-  }
-  .login-btn {
-    height: 46px;
-    width: 100%;
-  }
-  .email-chkbox {
-    margin: 0px;
-  }
-`;
-
-const LogInForUserSection = styled.div`
-  width: 60%;
-  margin: 0 auto;
-  .for-login-menu {
-    display: flex;
-  }
-`;
-const OauthLogInSection = styled.div`
-  width: 400px;
-`;
 function SignIn() {
   const navigate = useNavigate();
   const [signInState, setSignInState] = useState({
@@ -86,7 +17,6 @@ function SignIn() {
   const signInHandler = (e) => {
     setSignInState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-console.log(setUserInfo);
   const signInSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -100,7 +30,7 @@ console.log(setUserInfo);
         setUserInfo(signInState.username);
         console.log(result.data);
         alert("로그인 성공");
-        navigate("/");
+        navigate(-1);
       }
     } catch (err) {
       alert("아이디 또는 비밀번호가 잘못되었습니다.");
@@ -187,5 +117,73 @@ console.log(setUserInfo);
     </>
   );
 }
+const SignInContainer = styled.div`
+  text-align: center;
+  width: 100%;
+`;
+
+const SignInList = styled.ul`
+  display: flex;
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+    min-height: 60px;
+    font-weight: 700;
+    color: rgb(210, 44, 38);
+    background-color: rgb(255, 255, 255);
+    border-top: 4px solid rgb(210, 44, 38);
+    border-left: 1px solid rgb(204, 204, 204);
+    border-bottom: 0px;
+  }
+`;
+const LogInTitle = styled.div`
+  margin-bottom: 70px;
+`;
+
+const LogInTypeTab = styled.div`
+  width: 980px;
+  margin: 0px auto;
+  padding-top: 70px;
+`;
+const LogInType = styled.div`
+  display: flex;
+  margin: 0px auto;
+  justify-content: center;
+`;
+
+const LogInSection = styled.div`
+  width: 500px;
+  .email-section {
+  }
+  .pw-section {
+  }
+  .input-email {
+    width: 100%;
+  }
+  .input-pw {
+    margin-top: 5px;
+    width: 100%;
+  }
+  .login-btn {
+    height: 46px;
+    width: 100%;
+  }
+  .email-chkbox {
+    margin: 0px;
+  }
+`;
+
+const LogInForUserSection = styled.div`
+  width: 60%;
+  margin: 0 auto;
+  .for-login-menu {
+    display: flex;
+  }
+`;
+const OauthLogInSection = styled.div`
+  width: 400px;
+`;
 
 export default SignIn;
